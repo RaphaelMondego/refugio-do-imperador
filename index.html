@@ -11,26 +11,27 @@
 <meta property="og:description" content="Um sítio inteiro só para os seus, entre a Mata Atlântica e o som da cachoeira.">
 <meta property="og:image" content="assets/og.jpg">
 <meta property="og:locale" content="pt_BR">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="is-loading">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol></svg>
 
 <div class="preloader" aria-hidden="true">
-  <svg class="preloader__crown" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M8 40h48M10 34 6 12l14 12L32 6l12 18 14-12-4 22z"/></svg>
-  <span>Refúgio do Imperador</span>
+  <img src="assets/logo-claro.png" width="640" height="483" alt="">
 </div>
 
 <div class="progress" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
   <a class="brand" href="#topo" aria-label="Refúgio do Imperador, início">
-    <svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 40h48M10 34 6 12l14 12L32 6l12 18 14-12-4 22z"/></svg>
-    <span>Refúgio <em>do</em> Imperador</span>
+    <img class="brand__mark brand__mark--escura" src="assets/emblema.png" alt="" height="160">
+    <img class="brand__mark brand__mark--clara" src="assets/emblema-claro.png" alt="" height="160">
+    <span>Refúgio do Imperador</span>
   </a>
   <nav class="nav__links" id="menu" aria-label="Principal">
     <a href="#experiencias">Experiências</a>
@@ -74,13 +75,29 @@
     </div>
   </div>
 
+  <aside class="spot" id="spot" aria-live="polite">
+    <img src="assets/thumb/fachada.webp" alt="" width="92" height="116">
+    <div class="spot__body">
+      <h3>A casa</h3>
+      <p></p>
+      <div class="spot__actions">
+        <button class="spot__photos" type="button">Ver fotos</button>
+        <span class="spot__nav"><button class="spot__prev" type="button" aria-label="Ponto anterior">‹</button><i class="spot__count">1/9</i><button class="spot__next" type="button" aria-label="Próximo ponto">›</button></span>
+      </div>
+    </div>
+    <button class="spot__close" type="button" aria-label="Voltar à vista geral">×</button>
+  </aside>
+
   <div class="hero__tools hero__in" style="--i:6">
+    <div class="hero__pills">
+    <button class="tour" id="tourBtn" type="button"><span class="tour__on">Explorar o sítio</span><span class="tour__off">Vista geral</span></button>
     <button class="daynight" id="dayNight" type="button" role="switch" aria-checked="false" aria-label="Alternar entre dia e noite">
       <span class="daynight__opt">Dia</span>
       <span class="daynight__track"><span class="daynight__thumb"></span></span>
       <span class="daynight__opt">Noite</span>
     </button>
-    <span class="hero__hint">Arraste para girar a maquete</span>
+    </div>
+    <span class="hero__hint">Arraste para girar · clique nos pontos para explorar</span>
   </div>
   <a class="hero__scroll" href="#sobre" aria-label="Rolar para baixo"><span></span></a>
 </section>
@@ -113,7 +130,7 @@
       <figure class="frame frame--b reveal-img" data-parallax="50"><img src="assets/thumb/chafariz.webp" width="540" height="720" alt="Chafariz no jardim com cadeiras ao fundo" loading="lazy"></figure>
       <span class="seal" aria-hidden="true">
         <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><text><textPath href="#circ">Refúgio do Imperador · Guapimirim · RJ · </textPath></text></svg>
-        <svg class="seal__crown" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40h48M10 34 6 12l14 12L32 6l12 18 14-12-4 22z"/></svg>
+        <img class="seal__logo" src="assets/emblema.png" alt="">
       </span>
     </div>
   </div>
@@ -263,15 +280,11 @@
     <header class="section__head">
       <p class="eyebrow reveal">Galeria</p>
       <h2 class="reveal">Cada canto, um <em>convite</em></h2>
+      <p class="section__sub reveal">Escolha um ambiente e veja o que te espera. Ao abrir, dá para pular direto para qualquer foto ou trocar de ambiente sem sair da tela.</p>
     </header>
-    <div class="filters reveal" role="tablist" aria-label="Filtrar fotos">
-      <button class="is-active" data-filter="all" type="button">Tudo</button>
-      <button data-filter="lazer" type="button">Lazer</button>
-      <button data-filter="noite" type="button">Noite</button>
-      <button data-filter="casa" type="button">A casa</button>
-      <button data-filter="natureza" type="button">Natureza</button>
-    </div>
-    <div class="masonry" id="masonry"></div>
+    <div class="albums reveal" id="albumTabs" role="tablist" aria-label="Ambientes"></div>
+    <div class="mosaic" id="mosaic"></div>
+    <div class="gallery__foot reveal"><button class="btn btn--ghost" id="allPhotos" type="button">Ver todas as fotos</button></div>
   </div>
 </section>
 
@@ -314,7 +327,7 @@
 <section class="cta" id="reservar">
   <img class="cta__bg" data-parallax-bg src="assets/img/jacuzzi-casa.webp" width="1600" height="1200" alt="" loading="lazy">
   <div class="cta__inner">
-    <svg class="cta__crown reveal" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 40h48M10 34 6 12l14 12L32 6l12 18 14-12-4 22z"/></svg>
+    <img class="cta__logo reveal" src="assets/emblema-claro.png" alt="">
     <h2 class="reveal">Seu refúgio está <em>esperando</em>.</h2>
     <p class="reveal">Conte para a gente as datas e o tamanho do grupo. Respondemos pelo WhatsApp com disponibilidade e valores.</p>
     <a class="btn btn--wa btn--big magnetic reveal" data-wa href="#">
@@ -329,10 +342,7 @@
 
 <footer class="footer">
   <div class="wrap footer__grid">
-    <a class="brand" href="#topo">
-      <svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 40h48M10 34 6 12l14 12L32 6l12 18 14-12-4 22z"/></svg>
-      <span>Refúgio <em>do</em> Imperador</span>
-    </a>
+    <a class="footer__logo" href="#topo" aria-label="Voltar ao início"><img src="assets/logo-claro.png" width="640" height="483" alt="Refúgio do Imperador" loading="lazy"></a>
     <p>Guapimirim · Rio de Janeiro</p>
     <p><a data-wa href="#">WhatsApp (21) 97278-0104</a> · <a href="https://www.instagram.com/refugio_do_imperador/" target="_blank" rel="noopener">@refugio_do_imperador</a></p>
   </div>
@@ -343,11 +353,18 @@
   <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa"/></svg>
 </a>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" hidden>
-  <button class="lightbox__close" type="button" aria-label="Fechar">×</button>
-  <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Foto anterior">‹</button>
-  <figure><img alt=""><figcaption></figcaption></figure>
-  <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Próxima foto">›</button>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galeria de fotos" hidden>
+  <div class="lightbox__top">
+    <div class="lightbox__albums" id="lbAlbums"></div>
+    <span class="lightbox__count"></span>
+    <button class="lightbox__close" type="button" aria-label="Fechar">×</button>
+  </div>
+  <div class="lightbox__stage">
+    <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Foto anterior">‹</button>
+    <figure><img alt=""><figcaption></figcaption></figure>
+    <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Próxima foto">›</button>
+  </div>
+  <div class="lightbox__strip" id="lbStrip"></div>
 </div>
 
 <script type="module" src="assets/js/main.js"></script>

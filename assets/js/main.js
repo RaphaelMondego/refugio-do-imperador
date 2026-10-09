@@ -8,30 +8,125 @@ const WA = 'https://wa.me/5521972780104?text=' + encodeURIComponent('Olá! Vi o 
 $$('[data-wa]').forEach((a) => { a.href = WA; a.target = '_blank'; a.rel = 'noopener'; });
 $('#year').textContent = new Date().getFullYear();
 
-// ?pronto e ?noite abrem a maquete já montada / no modo noite
+// ?pronto, ?noite e ?ponto=<id> abrem a maquete já montada / à noite / num ponto do tour
 const preview = new URLSearchParams(location.search);
 
-// ---------- hero 3D ----------
-const hero = $('#hero');
-let hero3d = null;
+// ---------- álbuns de fotos ----------
+const ALBUMS = [
+  { id: 'piscina', name: 'Piscina & jacuzzi', photos: [['vista-jacuzzi-casa', 'Jacuzzi com vista para a serra'], ['piscina-1', 'Piscina'], ['jacuzzi-ceu', 'Jacuzzi'], ['jacuzzi-casa', 'Deck da jacuzzi'], ['piscina-3', 'Piscina'], ['jacuzzi-deck', 'Jacuzzi e piscina'], ['jacuzzi-espuma', 'Banho de espuma'], ['piscina-2', 'Dia de sol'], ['piscina-campo', 'Piscina e campo'], ['jacuzzi-brinde', 'Brinde na jacuzzi']] },
+  { id: 'noite', name: 'À noite', photos: [['piscina-noite-1', 'Piscina iluminada'], ['fogueira-noite-1', 'Fogueira à noite'], ['jacuzzi-noite', 'Jacuzzi à noite'], ['vinho-noite', 'Um brinde sob as luzes'], ['coreto-noite', 'Coreto iluminado'], ['piscina-noite-2', 'Piscina ao anoitecer'], ['luzes-noite', 'Varal de luzes'], ['fogueira-noite-2', 'Fogo aceso'], ['jacuzzi-neon', 'Jacuzzi em neon'], ['jardim-luzes', 'Jardim à noite']] },
+  { id: 'jardim', name: 'Jardim & fogueira', photos: [['fogueira-dia', 'Roda de fogueira'], ['fachada', 'A casa'], ['chafariz', 'Chafariz'], ['ombrelone', 'Jardim'], ['mesa-tronco', 'Cantinho no jardim'], ['carpas', 'Carpas'], ['jardim', 'Jardim'], ['mamoeiro', 'Mamoeiro']] },
+  { id: 'gourmet', name: 'Gourmet', photos: [['mesa-rustica', 'Mesa rústica para 12'], ['churrasqueira', 'Churrasqueira e forno'], ['forno-pizza', 'Forno de pizza'], ['gourmet', 'Espaço gourmet'], ['bancada-externa', 'Cozinha ao ar livre'], ['mesa-rustica-2', 'Área de jantar']] },
+  { id: 'lazer', name: 'Jogos & campo', photos: [['sinuca', 'Sinuca'], ['playground-1', 'Playground'], ['campo-1', 'Campo de futebol'], ['ping-pong', 'Pingue-pongue'], ['fliperama', 'Fliperama'], ['sinuca-bolas', 'Sinuca'], ['playground-2', 'Playground'], ['campo-2', 'Campo de futebol']] },
+  { id: 'casa', name: 'A casa', photos: [['sala-1', 'Sala de estar'], ['quarto-1', 'Quarto 1'], ['cozinha-1', 'Cozinha'], ['quarto-2', 'Quarto 2'], ['cantinho-cafe', 'Cantinho do café'], ['sala-2', 'Sala de estar'], ['quarto-3', 'Quarto 3'], ['quarto-4', 'Quarto 4'], ['quarto-5', 'Quarto 5'], ['quarto-1b', 'Quarto 1'], ['quarto-2b', 'Quarto 2'], ['sala-3', 'Sala de estar'], ['cozinha-2', 'Cozinha'], ['cha', 'Chá para relaxar'], ['banheiro-1', 'Banheiro'], ['banheiro-2', 'Banheiro']] },
+  { id: 'cachoeira', name: 'Cachoeira', photos: [['cachoeira-1', 'Cachoeira a 100 m'], ['cachoeira-2', 'Rio na mata'], ['cachoeira-3', 'Cachoeira'], ['cachoeira-4', 'Águas claras']] },
+];
+const ALL = { id: 'todas', name: 'Todas', photos: ALBUMS.flatMap((a) => a.photos) };
+const albumOf = (name) => ALBUMS.find((a) => a.photos.some((p) => p[0] === name));
+
+// ---------- visualizador ----------
+const lb = $('#lightbox'), lbStage = $('.lightbox__stage', lb), lbImg = $('img', lbStage), lbCap = $('figcaption', lbStage), lbCount = $('.lightbox__count', lb), lbChips = $('#lbAlbums'), lbStrip = $('#lbStrip');
+let lbAlbum = ALL, lbPos = 0, lbFocus = null;
+lbChips.innerHTML = [ALL, ...ALBUMS].map((a) => `<button type="button" data-album="${a.id}">${a.name}<small>${a.photos.length}</small></button>`).join('');
+const lbShow = () => {
+  const [n, cap] = lbAlbum.photos[lbPos];
+  lbImg.classList.remove('is-ready');
+  const src = `assets/img/${n}.webp`, pre = new Image();
+  pre.onload = () => { if (lbAlbum.photos[lbPos][0] !== n) return; lbImg.src = src; lbImg.alt = cap; requestAnimationFrame(() => lbImg.classList.add('is-ready')); };
+  pre.src = src;
+  lbCap.textContent = cap;
+  lbCount.textContent = `${lbPos + 1} / ${lbAlbum.photos.length}`;
+  $$('button', lbStrip).forEach((b, i) => {
+    b.classList.toggle('is-active', i === lbPos);
+    if (i === lbPos) lbStrip.scrollTo({ left: b.offsetLeft - lbStrip.clientWidth / 2 + b.clientWidth / 2, behavior: reduced ? 'auto' : 'smooth' });
+  });
+  // pré-carrega a próxima
+  new Image().src = `assets/img/${lbAlbum.photos[(lbPos + 1) % lbAlbum.photos.length][0]}.webp`;
+};
+const lbSetAlbum = (album, pos = 0) => {
+  lbAlbum = album; lbPos = pos;
+  $$('button', lbChips).forEach((b) => { const on = b.dataset.album === album.id; b.classList.toggle('is-active', on); if (on) lbChips.scrollTo({ left: b.offsetLeft - 16 }); });
+  lbStrip.innerHTML = album.photos.map(([n, cap], i) => `<button type="button" data-i="${i}" aria-label="${cap}"><img src="assets/thumb/${n}.webp" alt="" loading="lazy"></button>`).join('');
+  lbStrip.scrollLeft = 0;
+  lbShow();
+};
+const lbOpen = (album, pos = 0) => { lbFocus = document.activeElement; lb.hidden = false; document.body.style.overflow = 'hidden'; requestAnimationFrame(() => lb.classList.add('is-open')); lbSetAlbum(album, pos); $('.lightbox__close').focus(); };
+const lbOpenPhoto = (name) => { const a = albumOf(name); if (a) lbOpen(a, a.photos.findIndex((p) => p[0] === name)); };
+const lbClose = () => { lb.classList.remove('is-open'); document.body.style.overflow = ''; setTimeout(() => { lb.hidden = true; lbImg.removeAttribute('src'); }, 400); lbFocus && lbFocus.focus(); };
+const lbStep = (d) => { lbPos = (lbPos + d + lbAlbum.photos.length) % lbAlbum.photos.length; lbShow(); };
+lbChips.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) lbSetAlbum([ALL, ...ALBUMS].find((a) => a.id === b.dataset.album)); });
+lbStrip.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { lbPos = +b.dataset.i; lbShow(); } });
+$('.lightbox__close').addEventListener('click', lbClose);
+$('.lightbox__nav--prev').addEventListener('click', () => lbStep(-1));
+$('.lightbox__nav--next').addEventListener('click', () => lbStep(1));
+lbStage.addEventListener('click', (e) => { if (e.target === lbStage || e.target.tagName === 'FIGURE') lbClose(); });
+let tx = 0;
+lbStage.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
+lbStage.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) lbStep(dx < 0 ? 1 : -1); }, { passive: true });
+
+// ---------- galeria por ambiente ----------
+const tabs = $('#albumTabs'), mosaic = $('#mosaic');
+tabs.innerHTML = ALBUMS.map((a, i) => `<button type="button" role="tab" data-album="${a.id}" aria-selected="${i === 0}" class="${i === 0 ? 'is-active' : ''}">${a.name}<small>${a.photos.length}</small></button>`).join('');
+const renderMosaic = (album) => {
+  const shown = album.photos.slice(0, 5), more = album.photos.length - shown.length;
+  mosaic.dataset.n = shown.length;
+  mosaic.dataset.album = album.id;
+  mosaic.innerHTML = shown.map(([n, cap], i) => `<button type="button" data-i="${i}" style="--i:${i}" aria-label="Abrir foto: ${cap}"><img src="assets/${i === 0 ? 'img' : 'thumb'}/${n}.webp" alt="${cap}" loading="lazy"><span>${cap}</span>${i === shown.length - 1 && more > 0 ? `<b>+${more}<small>fotos</small></b>` : ''}</button>`).join('');
+  requestAnimationFrame(() => requestAnimationFrame(() => mosaic.classList.add('is-in')));
+};
+tabs.addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b || b.classList.contains('is-active')) return;
+  $$('button', tabs).forEach((x) => { x.classList.toggle('is-active', x === b); x.setAttribute('aria-selected', String(x === b)); });
+  mosaic.classList.remove('is-in');
+  setTimeout(() => renderMosaic(ALBUMS.find((a) => a.id === b.dataset.album)), reduced ? 0 : 260);
+});
+mosaic.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) lbOpen(ALBUMS.find((a) => a.id === mosaic.dataset.album), +b.dataset.i); });
+renderMosaic(ALBUMS[0]);
+const allBtn = $('#allPhotos');
+allBtn.textContent = `Ver todas as ${ALL.photos.length} fotos`;
+allBtn.addEventListener('click', () => lbOpen(ALL, 0));
+
+// ---------- hero 3D + tour pelos pontos do sítio ----------
+const SPOTS = [
+  { id: 'casa', title: 'A casa', text: 'Cinco quartos climatizados, três suítes, sala ampla e cozinha completa.', img: 'fachada' },
+  { id: 'piscina', title: 'Piscina', text: 'Privativa, para mergulhar o dia inteiro. À noite, acende em cores.', img: 'piscina-1' },
+  { id: 'jacuzzi', title: 'Jacuzzi', text: 'No deck de madeira, com ombrelone e vista para as montanhas.', img: 'jacuzzi-ceu' },
+  { id: 'fogueira', title: 'Roda de fogueira', text: 'Cadeiras em círculo sob o varal de luzes, para a noite render.', img: 'fogueira-dia' },
+  { id: 'gourmet', title: 'Espaço gourmet', text: 'Churrasqueira a carvão, forno de pizza e cozinha ao ar livre.', img: 'churrasqueira' },
+  { id: 'jogos', title: 'Jogos', text: 'Sinuca, pingue-pongue e fliperama para todas as idades.', img: 'sinuca' },
+  { id: 'campo', title: 'Campo de futebol', text: 'Gramado e cercado, pronto para a pelada do fim de tarde.', img: 'campo-1' },
+  { id: 'playground', title: 'Playground', text: 'Mini parquinho para as crianças de até 10 anos.', img: 'playground-1' },
+  { id: 'cachoeira', title: 'Cachoeira', text: 'A 100 metros do portão, dentro da Mata Atlântica.', img: 'cachoeira-1' },
+];
+const hero = $('#hero'), spotEl = $('#spot');
+let hero3d = null, spotI = -1;
+const openSpot = (i) => {
+  if (i < 0 && spotI < 0) return;
+  spotI = (i + SPOTS.length) % SPOTS.length;
+  const s = SPOTS[spotI];
+  $('img', spotEl).src = `assets/thumb/${s.img}.webp`; $('img', spotEl).alt = s.title;
+  $('h3', spotEl).textContent = s.title; $('p', spotEl).textContent = s.text;
+  $('.spot__count', spotEl).textContent = `${spotI + 1}/${SPOTS.length}`;
+  spotEl.classList.add('is-open'); hero.classList.add('has-spot');
+  hero3d && hero3d.focus(s.id);
+};
+const closeSpot = () => { spotI = -1; spotEl.classList.remove('is-open'); hero.classList.remove('has-spot'); hero3d && hero3d.focus(null); };
+$('.spot__close', spotEl).addEventListener('click', closeSpot);
+$('.spot__prev', spotEl).addEventListener('click', () => openSpot(spotI - 1));
+$('.spot__next', spotEl).addEventListener('click', () => openSpot(spotI + 1));
+$('.spot__photos', spotEl).addEventListener('click', () => lbOpenPhoto(SPOTS[spotI].img));
+$('#tourBtn').addEventListener('click', () => (spotI < 0 ? openSpot(0) : closeSpot()));
+
 const heroReady = (async () => {
   try {
     const probe = document.createElement('canvas');
     if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) throw new Error('sem WebGL');
     const { initHero } = await import('./hero3d.js');
-    hero3d = initHero({ canvas: $('#heroCanvas'), labelsEl: $('#heroLabels'), hero, reducedMotion: reduced });
+    hero3d = initHero({ canvas: $('#heroCanvas'), labelsEl: $('#heroLabels'), hero, reducedMotion: reduced, onSpot: (id) => openSpot(SPOTS.findIndex((s) => s.id === id)) });
   } catch (err) {
     document.documentElement.classList.add('no-webgl');
   }
 })();
-
-const loaded = new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', r)));
-const minTime = new Promise((r) => setTimeout(r, reduced ? 0 : 1500));
-Promise.all([heroReady, minTime, Promise.race([loaded, new Promise((r) => setTimeout(r, 4000))])]).then(() => {
-  document.body.classList.remove('is-loading');
-  setTimeout(() => hero3d && hero3d.start(preview.has('pronto')), 250);
-  if (preview.has('noite')) { dn.click(); hero3d && hero3d.setNight(true, true); }
-});
 
 // dia / noite
 const dn = $('#dayNight');
@@ -41,6 +136,20 @@ dn.addEventListener('click', () => {
   hero.classList.toggle('is-night', night);
   document.body.classList.toggle('night-hero', night);
   hero3d && hero3d.setNight(night);
+});
+
+const loaded = new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', r)));
+const minTime = new Promise((r) => setTimeout(r, reduced ? 0 : 1500));
+Promise.all([heroReady, minTime, Promise.race([loaded, new Promise((r) => setTimeout(r, 4000))])]).then(() => {
+  document.body.classList.remove('is-loading');
+  setTimeout(() => hero3d && hero3d.start(preview.has('pronto')), 250);
+  if (preview.has('noite')) { dn.click(); hero3d && hero3d.setNight(true, true); }
+  if (preview.has('ponto')) setTimeout(() => { const i = SPOTS.findIndex((s) => s.id === preview.get('ponto')); if (i >= 0) openSpot(i); }, 400);
+});
+
+addEventListener('keydown', (e) => {
+  if (!lb.hidden) { if (e.key === 'Escape') lbClose(); if (e.key === 'ArrowLeft') lbStep(-1); if (e.key === 'ArrowRight') lbStep(1); return; }
+  if (spotI >= 0 && e.key === 'Escape') closeSpot();
 });
 
 // ---------- nav ----------
@@ -61,6 +170,7 @@ const onScroll = () => {
   nav.classList.toggle('is-hidden', y > vh && y > lastY && !document.body.classList.contains('menu-open'));
   waFloat.classList.toggle('is-on', y > vh * 0.7);
   progress.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
+  if (spotI >= 0 && y > vh * 0.6) closeSpot();
   lastY = y;
   if (reduced) return;
   if (y < vh) mountains.forEach((p) => { const d = +p.dataset.depth; p.style.transform = 'translate3d(' + (mx * d * -0.6).toFixed(1) + 'px,' + (y * d * 0.006).toFixed(1) + 'px,0)'; });
@@ -133,65 +243,5 @@ rooms.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') re
 addEventListener('pointermove', (e) => { if (!rDown) return; const dx = e.clientX - rStart; rMoved = Math.max(rMoved, Math.abs(dx)); if (rMoved > 6) rooms.classList.add('is-dragging'); rooms.scrollLeft = rLeft - dx; });
 addEventListener('pointerup', () => { if (!rDown) return; rDown = false; setTimeout(() => rooms.classList.remove('is-dragging'), 0); });
 
-// ---------- galeria + lightbox ----------
-const PHOTOS = [
-  ['vista-jacuzzi-casa', 'Jacuzzi com vista para a serra', 'lazer', 1600, 1200], ['piscina-1', 'Piscina', 'lazer', 1200, 1600], ['piscina-noite-1', 'Piscina iluminada', 'noite', 1600, 872],
-  ['fachada', 'A casa', 'casa', 1200, 1600], ['fogueira-dia', 'Roda de fogueira', 'lazer', 1200, 1600], ['cachoeira-1', 'Cachoeira a 100 m', 'natureza', 1200, 1600],
-  ['jacuzzi-ceu', 'Jacuzzi', 'lazer', 1200, 1600], ['fogueira-noite-1', 'Fogueira à noite', 'noite', 1443, 1600], ['mesa-rustica', 'Mesa rústica para 12', 'casa', 1200, 1600],
-  ['sala-1', 'Sala de estar', 'casa', 1200, 1600], ['coreto-noite', 'Coreto iluminado', 'noite', 1600, 904], ['playground-1', 'Playground', 'lazer', 1200, 1600],
-  ['sinuca', 'Sinuca', 'lazer', 1200, 1600], ['quarto-1', 'Quarto 1', 'casa', 1200, 1600], ['chafariz', 'Chafariz', 'natureza', 1200, 1600],
-  ['jacuzzi-casa', 'Deck da jacuzzi', 'lazer', 1600, 1200], ['vinho-noite', 'Um brinde sob as luzes', 'noite', 1118, 1600], ['churrasqueira', 'Churrasqueira e forno', 'lazer', 1200, 1600],
-  ['cachoeira-2', 'Rio na mata', 'natureza', 1200, 1600], ['piscina-3', 'Piscina', 'lazer', 1200, 1600], ['forno-pizza', 'Forno de pizza', 'lazer', 1200, 1600],
-  ['jacuzzi-noite', 'Jacuzzi à noite', 'noite', 900, 1600], ['cozinha-1', 'Cozinha', 'casa', 1200, 1600], ['campo-1', 'Campo de futebol', 'lazer', 1200, 1600],
-  ['quarto-2', 'Quarto 2', 'casa', 1200, 1600], ['ombrelone', 'Jardim', 'natureza', 1200, 1600], ['piscina-noite-2', 'Piscina ao anoitecer', 'noite', 1200, 1600],
-  ['ping-pong', 'Pingue-pongue', 'lazer', 1200, 1600], ['jacuzzi-deck', 'Jacuzzi e piscina', 'lazer', 1600, 1200], ['cantinho-cafe', 'Cantinho do café', 'casa', 1200, 1600],
-  ['cachoeira-3', 'Cachoeira', 'natureza', 1200, 1600], ['fliperama', 'Fliperama', 'lazer', 1200, 1600], ['quarto-3', 'Quarto 3', 'casa', 1200, 1600],
-  ['fogueira-noite-2', 'Fogo aceso', 'noite', 900, 1600], ['mesa-tronco', 'Cantinho no jardim', 'natureza', 1200, 1600], ['sala-2', 'Sala de estar', 'casa', 1200, 1600],
-  ['jacuzzi-espuma', 'Banho de espuma', 'lazer', 1200, 1600], ['luzes-noite', 'Varal de luzes', 'noite', 1161, 1600], ['quarto-4', 'Quarto 4', 'casa', 1200, 1600],
-  ['carpas', 'Carpas', 'natureza', 900, 1600], ['piscina-campo', 'Piscina e campo', 'lazer', 1200, 1600], ['quarto-5', 'Quarto 5', 'casa', 1200, 1600],
-  ['jacuzzi-neon', 'Jacuzzi em neon', 'noite', 900, 1600], ['banheiro-1', 'Banheiro', 'casa', 1200, 1600], ['cachoeira-4', 'Águas claras', 'natureza', 1200, 1600],
-  ['jacuzzi-brinde', 'Brinde na jacuzzi', 'lazer', 900, 1600], ['cha', 'Chá para relaxar', 'casa', 1200, 1600], ['jardim-luzes', 'Jardim à noite', 'noite', 1200, 1600],
-];
-const byName = new Map(PHOTOS.map((p, i) => [p[0], i]));
-const masonry = $('#masonry');
-masonry.innerHTML = PHOTOS.map(([n, cap, cat, w, h], i) => `<button type="button" data-i="${i}" data-cat="${cat}" data-cap="${cap}" aria-label="Ampliar foto: ${cap}"><img src="assets/thumb/${n}.webp" width="${w}" height="${h}" alt="${cap}" loading="lazy"></button>`).join('');
-const tiles = $$('button', masonry);
-const tileIO = new IntersectionObserver((entries) => {
-  entries.forEach((en) => { if (en.isIntersecting) { en.target.style.transitionDelay = Math.random() * 0.25 + 's'; en.target.classList.add('is-in'); tileIO.unobserve(en.target); } });
-}, { rootMargin: '0px 0px -4% 0px' });
-tiles.forEach((t) => tileIO.observe(t));
-
-let visibleList = PHOTOS.map((_, i) => i);
-$$('.filters button').forEach((b) => b.addEventListener('click', () => {
-  $$('.filters button').forEach((x) => x.classList.toggle('is-active', x === b));
-  const f = b.dataset.filter;
-  visibleList = [];
-  tiles.forEach((t, i) => {
-    const show = f === 'all' || t.dataset.cat === f;
-    t.classList.toggle('is-out', !show);
-    if (show) { visibleList.push(i); t.classList.remove('is-in'); t.style.transitionDelay = Math.min(visibleList.length, 12) * 0.04 + 's'; requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('is-in'))); }
-  });
-}));
-
-const lb = $('#lightbox'), lbImg = $('img', lb), lbCap = $('figcaption', lb);
-let lbList = [], lbPos = 0, lbFocus = null;
-const lbShow = () => {
-  const [n, cap] = PHOTOS[lbList[lbPos]];
-  lbImg.classList.remove('is-ready');
-  const src = `assets/img/${n}.webp`, pre = new Image();
-  pre.onload = () => { if (PHOTOS[lbList[lbPos]][0] !== n) return; lbImg.src = src; lbImg.alt = cap; lbCap.textContent = `${cap} · ${lbPos + 1}/${lbList.length}`; requestAnimationFrame(() => lbImg.classList.add('is-ready')); };
-  pre.src = src;
-};
-const lbOpen = (list, pos) => { lbList = list; lbPos = pos; lbFocus = document.activeElement; lb.hidden = false; document.body.style.overflow = 'hidden'; requestAnimationFrame(() => lb.classList.add('is-open')); lbShow(); $('.lightbox__close').focus(); };
-const lbClose = () => { lb.classList.remove('is-open'); document.body.style.overflow = ''; setTimeout(() => { lb.hidden = true; lbImg.removeAttribute('src'); }, 400); lbFocus && lbFocus.focus(); };
-const lbStep = (d) => { lbPos = (lbPos + d + lbList.length) % lbList.length; lbShow(); };
-masonry.addEventListener('click', (e) => { const t = e.target.closest('button'); if (t) lbOpen(visibleList.slice(), visibleList.indexOf(+t.dataset.i)); });
-$$('[data-lb]').forEach((el) => el.addEventListener('click', () => { if (rMoved > 6) return; const i = byName.get(el.dataset.lb); if (i != null) lbOpen(PHOTOS.map((_, k) => k), i); }));
-$('.lightbox__close').addEventListener('click', lbClose);
-$('.lightbox__nav--prev').addEventListener('click', () => lbStep(-1));
-$('.lightbox__nav--next').addEventListener('click', () => lbStep(1));
-lb.addEventListener('click', (e) => { if (e.target === lb || e.target.tagName === 'FIGURE') lbClose(); });
-addEventListener('keydown', (e) => { if (lb.hidden) return; if (e.key === 'Escape') lbClose(); if (e.key === 'ArrowLeft') lbStep(-1); if (e.key === 'ArrowRight') lbStep(1); });
-let tx = 0;
-lb.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
-lb.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) lbStep(dx < 0 ? 1 : -1); }, { passive: true });
+// fotos avulsas da página abrem o visualizador já no álbum certo
+$$('[data-lb]').forEach((el) => el.addEventListener('click', () => { if (rMoved > 6) { rMoved = 0; return; } lbOpenPhoto(el.dataset.lb); }));
