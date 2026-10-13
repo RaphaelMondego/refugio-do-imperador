@@ -16,17 +16,25 @@ const ALBUMS = [
   { id: 'piscina', name: 'Piscina & jacuzzi', photos: [['vista-jacuzzi-casa', 'Jacuzzi com vista para a serra'], ['piscina-1', 'Piscina'], ['jacuzzi-ceu', 'Jacuzzi'], ['jacuzzi-casa', 'Deck da jacuzzi'], ['piscina-3', 'Piscina'], ['jacuzzi-deck', 'Jacuzzi e piscina'], ['jacuzzi-espuma', 'Banho de espuma'], ['piscina-2', 'Dia de sol'], ['piscina-campo', 'Piscina e campo'], ['jacuzzi-brinde', 'Brinde na jacuzzi']] },
   { id: 'noite', name: 'À noite', photos: [['piscina-noite-1', 'Piscina iluminada'], ['fogueira-noite-1', 'Fogueira à noite'], ['jacuzzi-noite', 'Jacuzzi à noite'], ['vinho-noite', 'Um brinde sob as luzes'], ['coreto-noite', 'Coreto iluminado'], ['piscina-noite-2', 'Piscina ao anoitecer'], ['luzes-noite', 'Varal de luzes'], ['fogueira-noite-2', 'Fogo aceso'], ['jacuzzi-neon', 'Jacuzzi em neon'], ['jardim-luzes', 'Jardim à noite']] },
   { id: 'jardim', name: 'Jardim & fogueira', photos: [['fogueira-dia', 'Roda de fogueira'], ['fachada', 'A casa'], ['chafariz', 'Chafariz'], ['ombrelone', 'Jardim'], ['mesa-tronco', 'Cantinho no jardim'], ['carpas', 'Carpas'], ['jardim', 'Jardim'], ['mamoeiro', 'Mamoeiro']] },
-  { id: 'gourmet', name: 'Gourmet', photos: [['mesa-rustica', 'Mesa rústica para 12'], ['churrasqueira', 'Churrasqueira e forno'], ['forno-pizza', 'Forno de pizza'], ['gourmet', 'Espaço gourmet'], ['bancada-externa', 'Cozinha ao ar livre'], ['mesa-rustica-2', 'Área de jantar']] },
+  { id: 'gourmet', name: 'Gourmet', photos: [['churrasqueira', 'Churrasqueira e forno'], ['forno-pizza', 'Forno de pizza'], ['gourmet', 'Espaço gourmet'], ['bancada-externa', 'Cozinha ao ar livre']] },
   { id: 'lazer', name: 'Jogos & campo', photos: [['sinuca', 'Sinuca'], ['playground-1', 'Playground'], ['campo-1', 'Campo de futebol'], ['ping-pong', 'Pingue-pongue'], ['fliperama', 'Fliperama'], ['sinuca-bolas', 'Sinuca'], ['playground-2', 'Playground'], ['campo-2', 'Campo de futebol']] },
-  { id: 'casa', name: 'A casa', photos: [['sala-1', 'Sala de estar'], ['quarto-1', 'Quarto 1'], ['cozinha-1', 'Cozinha'], ['quarto-2', 'Quarto 2'], ['cantinho-cafe', 'Cantinho do café'], ['sala-2', 'Sala de estar'], ['quarto-3', 'Quarto 3'], ['quarto-4', 'Quarto 4'], ['quarto-5', 'Quarto 5'], ['quarto-1b', 'Quarto 1'], ['quarto-2b', 'Quarto 2'], ['sala-3', 'Sala de estar'], ['cozinha-2', 'Cozinha'], ['cha', 'Chá para relaxar'], ['banheiro-1', 'Banheiro'], ['banheiro-2', 'Banheiro']] },
   { id: 'cachoeira', name: 'Cachoeira', photos: [['cachoeira-1', 'Cachoeira a 100 m'], ['cachoeira-2', 'Rio na mata'], ['cachoeira-3', 'Cachoeira'], ['cachoeira-4', 'Águas claras']] },
+  // dentro da casa: mesma divisão e ordem do tour de fotos original, cômodo por cômodo
+  { id: 'sala', name: 'Sala de estar', inside: true, photos: [['sala-3', 'Sala de estar'], ['sala-f02', 'Sala de estar'], ['sala-1', 'Sala de estar'], ['sala-f04', 'Sala de estar'], ['sala-2', 'Sala de estar']] },
+  { id: 'cozinha', name: 'Cozinha', inside: true, photos: [['cozinha-f06', 'Cozinha'], ['cozinha-f07', 'Chá para relaxar'], ['cozinha-f08', 'Cozinha'], ['cozinha-f09', 'Cozinha'], ['cozinha-f10', 'Cozinha'], ['cozinha-2', 'Cozinha'], ['cozinha-1', 'Cozinha'], ['cozinha-f13', 'Cantinho do café'], ['cozinha-f14', 'Chá para relaxar'], ['cha', 'Chá para relaxar'], ['cantinho-cafe', 'Cantinho do café'], ['cozinha-f17', 'Cantinho do café']] },
+  { id: 'jantar', name: 'Área de jantar', inside: true, photos: [['mesa-rustica-2', 'Mesa rústica para 12'], ['mesa-rustica', 'Mesa rústica para 12'], ['jantar-f20', 'Área de jantar'], ['jantar-f21', 'Área de jantar'], ['jantar-f22', 'Área de jantar'], ['jantar-f23', 'Área de jantar']] },
+  { id: 'quarto-1', name: 'Quarto 1', inside: true, photos: [['quarto-1-f24', 'Quarto 1'], ['quarto-1b', 'Quarto 1'], ['quarto-1-f26', 'Quarto 1'], ['quarto-1-f27', 'Quarto 1'], ['quarto-1', 'Quarto 1'], ['quarto-1-f29', 'Quarto 1']] },
+  { id: 'quarto-2', name: 'Quarto 2', inside: true, photos: [['quarto-2', 'Quarto 2'], ['quarto-2-f31', 'Quarto 2'], ['quarto-2b', 'Quarto 2'], ['quarto-2-f33', 'Quarto 2 · banheiro'], ['banheiro-1', 'Quarto 2 · banheiro'], ['quarto-2-f35', 'Quarto 2 · banheiro'], ['quarto-2-f36', 'Quarto 2']] },
+  { id: 'quarto-3', name: 'Quarto 3', inside: true, photos: [['quarto-3-f37', 'Quarto 3 · banheiro'], ['banheiro-2', 'Quarto 3 · banheiro'], ['quarto-3-f39', 'Quarto 3 · banheiro'], ['quarto-3-f40', 'Quarto 3'], ['quarto-3', 'Quarto 3']] },
+  { id: 'quarto-4', name: 'Quarto 4', inside: true, photos: [['quarto-4', 'Quarto 4'], ['quarto-4-f43', 'Quarto 4'], ['quarto-4-f44', 'Quarto 4']] },
+  { id: 'quarto-5', name: 'Quarto 5', inside: true, photos: [['quarto-5', 'Quarto 5'], ['quarto-5-f46', 'Quarto 5'], ['quarto-5-f47', 'Quarto 5']] },
 ];
 const ALL = { id: 'todas', name: 'Todas', photos: ALBUMS.flatMap((a) => a.photos) };
 const albumOf = (name) => ALBUMS.find((a) => a.photos.some((p) => p[0] === name));
 
 // ---------- visualizador ----------
 const lb = $('#lightbox'), lbStage = $('.lightbox__stage', lb), lbImg = $('img', lbStage), lbCap = $('figcaption', lbStage), lbCount = $('.lightbox__count', lb), lbChips = $('#lbAlbums'), lbStrip = $('#lbStrip');
-let lbAlbum = ALL, lbPos = 0, lbFocus = null;
+let lbAlbum = ALL, lbPos = 0, lbFocus = null, lbTimer = 0;
 lbChips.innerHTML = [ALL, ...ALBUMS].map((a) => `<button type="button" data-album="${a.id}">${a.name}<small>${a.photos.length}</small></button>`).join('');
 const lbShow = () => {
   const [n, cap] = lbAlbum.photos[lbPos];
@@ -50,9 +58,9 @@ const lbSetAlbum = (album, pos = 0) => {
   lbStrip.scrollLeft = 0;
   lbShow();
 };
-const lbOpen = (album, pos = 0) => { lbFocus = document.activeElement; lb.hidden = false; document.body.style.overflow = 'hidden'; requestAnimationFrame(() => lb.classList.add('is-open')); lbSetAlbum(album, pos); $('.lightbox__close').focus(); };
+const lbOpen = (album, pos = 0) => { clearTimeout(lbTimer); lbFocus = document.activeElement; lb.hidden = false; document.body.style.overflow = 'hidden'; requestAnimationFrame(() => lb.classList.add('is-open')); lbSetAlbum(album, pos); $('.lightbox__close').focus(); };
 const lbOpenPhoto = (name) => { const a = albumOf(name); if (a) lbOpen(a, a.photos.findIndex((p) => p[0] === name)); };
-const lbClose = () => { lb.classList.remove('is-open'); document.body.style.overflow = ''; setTimeout(() => { lb.hidden = true; lbImg.removeAttribute('src'); }, 400); lbFocus && lbFocus.focus(); };
+const lbClose = () => { lb.classList.remove('is-open'); document.body.style.overflow = ''; lbTimer = setTimeout(() => { lb.hidden = true; lbImg.removeAttribute('src'); }, 400); lbFocus && lbFocus.focus(); };
 const lbStep = (d) => { lbPos = (lbPos + d + lbAlbum.photos.length) % lbAlbum.photos.length; lbShow(); };
 lbChips.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) lbSetAlbum([ALL, ...ALBUMS].find((a) => a.id === b.dataset.album)); });
 lbStrip.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { lbPos = +b.dataset.i; lbShow(); } });
@@ -66,7 +74,8 @@ lbStage.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].cli
 
 // ---------- galeria por ambiente ----------
 const tabs = $('#albumTabs'), mosaic = $('#mosaic');
-tabs.innerHTML = ALBUMS.map((a, i) => `<button type="button" role="tab" data-album="${a.id}" aria-selected="${i === 0}" class="${i === 0 ? 'is-active' : ''}">${a.name}<small>${a.photos.length}</small></button>`).join('');
+const tabBtn = (a) => `<button type="button" role="tab" data-album="${a.id}" aria-selected="${a === ALBUMS[0]}" class="${a === ALBUMS[0] ? 'is-active' : ''}">${a.name}<small>${a.photos.length}</small></button>`;
+tabs.innerHTML = [['Área externa', ALBUMS.filter((a) => !a.inside)], ['Dentro da casa', ALBUMS.filter((a) => a.inside)]].map(([label, list]) => `<div class="albums__row"><span>${label}</span><div>${list.map(tabBtn).join('')}</div></div>`).join('');
 const renderMosaic = (album) => {
   const shown = album.photos.slice(0, 5), more = album.photos.length - shown.length;
   mosaic.dataset.n = shown.length;

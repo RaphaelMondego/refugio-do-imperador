@@ -293,8 +293,10 @@ body:not(.is-loading) .hero__in { opacity: 1; transform: none; }
 /* galeria por ambiente */
 .gallery { background: var(--areia); }
 .gallery .section__head { margin-bottom: 28px; }
-.albums { display: flex; gap: 8px; margin: 0 -20px 20px; padding: 0 20px 4px; overflow-x: auto; scrollbar-width: none; }
-.albums::-webkit-scrollbar { display: none; }
+.albums { margin-bottom: 20px; display: grid; gap: 12px; }
+.albums__row > span { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.albums__row > div { display: flex; gap: 8px; margin: 0 -20px; padding: 0 20px 2px; overflow-x: auto; scrollbar-width: none; }
+.albums__row > div::-webkit-scrollbar { display: none; }
 .albums button { flex: none; display: inline-flex; align-items: center; gap: 8px; font-size: .8rem; font-weight: 600; padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(20, 38, 29, .22); transition: background .3s, color .3s, border-color .3s; }
 .albums button small { font-size: .72rem; font-weight: 500; opacity: .55; }
 .albums button:hover { border-color: var(--verde-900); }
@@ -312,7 +314,10 @@ body:not(.is-loading) .hero__in { opacity: 1; transform: none; }
 .mosaic button:hover b { background: rgba(14, 27, 20, .46); }
 .gallery__foot { margin-top: 24px; text-align: center; }
 @media (min-width: 800px) {
-  .albums { margin: 0 0 24px; padding: 0 0 4px; flex-wrap: wrap; }
+  .albums { margin-bottom: 24px; gap: 14px; }
+  .albums__row { display: flex; align-items: center; gap: 16px; }
+  .albums__row > span { margin: 0; width: 118px; flex: none; }
+  .albums__row > div { margin: 0; padding: 0; flex-wrap: wrap; }
   .mosaic { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 14px; height: min(68vh, 600px); }
   .mosaic button, .mosaic button:first-child { aspect-ratio: auto; }
   .mosaic button:first-child { grid-column: 1 / 3; grid-row: 1 / 3; }
