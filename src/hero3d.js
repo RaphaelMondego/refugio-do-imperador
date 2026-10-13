@@ -182,7 +182,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     [[1.7, 1.7], [-1.7, 1.7], [1.7, -1.7], [-1.7, -1.7]].forEach(([x, z]) => g.add(box(0.2, 2.8, 0.2, C.wood, x, 0.35, z)));
     const roof = shadow(new THREE.Mesh(new THREE.ConeGeometry(3.5, 1.9, 4), M.roof)); roof.rotation.y = Math.PI / 4; roof.position.y = 3.15 + 0.95; g.add(drop(roof, 1.5));
     g.add(cyl(0.9, 0.9, 0.08, 16, C.white, 0, 1.1, 0), cyl(0.12, 0.25, 0.75, 8, C.white, 0, 0.35, 0));
-    piece(g, 2, -1, 1.1); }
+    piece(g, 3.4, 5, 1.1); }
 
   // chafariz
   { const g = new THREE.Group();
@@ -198,7 +198,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     const slide = box(0.8, 0.1, 2.6, C.slide, 0, 0.62, 2.0); slide.rotation.x = 0.55; g.add(slide);
     const ramp = box(1.0, 0.1, 2.0, 0xd9642f, -1.6, 0.62, 0); ramp.rotation.z = -0.75; g.add(ramp);
     g.add(box(0.1, 1.8, 0.1, C.wood, 2.6, 0, -0.6), box(0.1, 1.8, 0.1, C.wood, 2.6, 0, 0.6), box(0.1, 0.1, 1.4, C.wood, 2.6, 1.8, 0), box(0.5, 0.06, 0.25, 0xd9642f, 2.6, 0.5, 0));
-    piece(g, 5.6, 6.6, 1.35); }
+    piece(g, 9, 15.6, 1.35); }
 
   // fogueira com cadeiras e varal de luzes
   const firePos = new THREE.Vector3(0.5, 0, 15.5);
@@ -236,7 +236,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
   stringLights([[7.2, 5.3], [7.2, -2.9], [19.8, -2.9], [19.8, 5.3]], 3.3, 2.0);
 
   // árvores
-  const blocked = [[-9, -7, 10.5], [-13.5, 1.5, 6.5], [14, -10, 8.6], [13.5, 1.2, 8.6], [17, 8.2, 5.2], [19, 13.5, 4], [0.5, 15.5, 5], [-11.5, 12.2, 3.6], [5.6, 6.6, 4], [2.2, -7.2, 4.6], [-5, 12, 3.2], [-5, 20, 3.2], [-17.6, 11.2, 6.6], [-2.3, 1.9, 2.6]];
+  const blocked = [[-9, -7, 10.5], [-13.5, 1.5, 6.5], [14, -10, 8.6], [13.5, 1.2, 8.6], [17, 8.2, 5.2], [19, 13.5, 4], [0.5, 15.5, 5], [-11.5, 12.2, 3.6], [9, 15.6, 4.2], [2.2, -7.2, 4.6], [-5, 12, 3.2], [-5, 20, 3.2], [-17.6, 11.7, 7], [-2.3, 1.9, 2.6]];
   const greens = [0x3f7d4a, 0x4f9157, 0x2f6b45, 0x64a05a];
   const tree = (x, z, s, delay) => {
     const g = new THREE.Group();
@@ -255,7 +255,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     if (blocked.some(([bx, bz, br]) => Math.hypot(x - bx, z - bz) < br)) continue;
     tree(x, z, 0.85 + rnd() * 0.75, 1.3 + rnd() * 1.0);
   }
-  [[2.5, -13.5, 1.3], [7.4, -6.2, 1.0], [-1.5, 6.5, 0.9], [9.5, 12.5, 0.9], [-14.5, 17.5, 1.0]].forEach(([x, z, s], i) => tree(x, z, s, 1.6 + i * 0.1));
+  [[2.5, -13.5, 1.3], [7.4, -6.2, 1.0], [-1.5, 6.5, 0.9], [7.8, 9.6, 0.9], [-14.2, 18, 1.0]].forEach(([x, z, s], i) => tree(x, z, s, 1.6 + i * 0.1));
 
   // ---------- serra ao fundo (com o Dedo de Deus) ----------
   { const g = new THREE.Group();
@@ -277,21 +277,21 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     });
     piece(g, 0, 0, 0.45); }
 
-  // ---------- garagem (2 a 3 carros) com a sinuca na parte coberta ----------
+  // ---------- garagem: carros em fila na parte descoberta e, ao fundo, a sinuca na parte coberta ----------
   { const g = new THREE.Group();
-    g.add(box(4.8, 0.08, 9.2, C.path));
-    const car = (x, z, color) => {
+    g.add(box(4.8, 0.08, 3.7, C.path, 0, 0, -3.55), box(2.7, 0.08, 7.3, C.path, 0, 0, 1.75));
+    const car = (z, color) => {
       const c = new THREE.Group();
-      c.add(box(1.6, 0.5, 3.7, color, 0, 0.3, 0), box(1.42, 0.48, 1.9, 0x26313a, 0, 0.8, -0.2));
-      [[-0.8, 1.15], [0.8, 1.15], [-0.8, -1.15], [0.8, -1.15]].forEach(([wx, wz]) => { const w = cyl(0.32, 0.32, 0.2, 10, 0x1b1d20, wx, 0, wz); w.rotation.z = Math.PI / 2; w.position.y = 0.32; c.add(w); });
-      c.position.set(x, 0.08, z); g.add(c);
+      c.add(box(1.6, 0.5, 3.2, color, 0, 0.3, 0), box(1.42, 0.48, 1.65, 0x26313a, 0, 0.8, -0.15));
+      [[-0.8, 0.98], [0.8, 0.98], [-0.8, -0.98], [0.8, -0.98]].forEach(([wx, wz]) => { const w = cyl(0.32, 0.32, 0.2, 10, 0x1b1d20, wx, 0, wz); w.rotation.z = Math.PI / 2; w.position.y = 0.32; c.add(w); });
+      c.position.set(0, 0.08, z); g.add(c);
     };
-    car(-1.1, -2.3, 0xecebe6); car(1.1, -2.1, 0x4a6fa5);
-    [[-2.1, 1.2], [2.1, 1.2], [-2.1, 4.3], [2.1, 4.3]].forEach(([x, z]) => g.add(box(0.2, 2.7, 0.2, C.wood, x, 0, z)));
-    const roof = hipRoof(5.2, 4.1, 1.1); roof.position.set(0, 2.7, 2.75); g.add(drop(roof, 1.7));
-    g.add(box(2.5, 0.16, 1.45, 0x3a2a1c, 0, 0.66, 2.75), box(2.2, 0.06, 1.15, 0x1f7a45, 0, 0.8, 2.75));
-    [[-1, 2.25], [1, 2.25], [-1, 3.25], [1, 3.25]].forEach(([x, z]) => g.add(box(0.12, 0.7, 0.12, 0x2a1d13, x, 0, z)));
-    piece(g, -17.6, 11.2, 0.9); }
+    car(0.1, 0xecebe6); car(3.6, 0x4a6fa5);
+    [[-2.1, -5.1], [2.1, -5.1], [-2.1, -2.0], [2.1, -2.0]].forEach(([x, z]) => g.add(box(0.2, 2.7, 0.2, C.wood, x, 0, z)));
+    const roof = hipRoof(5.2, 4.1, 1.1); roof.position.set(0, 2.7, -3.55); g.add(drop(roof, 1.7));
+    g.add(box(2.5, 0.16, 1.45, 0x3a2a1c, 0, 0.66, -3.55), box(2.2, 0.06, 1.15, 0x1f7a45, 0, 0.8, -3.55));
+    [[-1, -4.05], [1, -4.05], [-1, -3.05], [1, -3.05]].forEach(([x, z]) => g.add(box(0.12, 0.7, 0.12, 0x2a1d13, x, 0, z)));
+    piece(g, -17.6, 11.7, 0.9); }
 
   // ---------- mesa de vidro ----------
   { const g = new THREE.Group();
@@ -301,7 +301,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
 
   // ---------- luminárias de jardim ----------
   { const g = new THREE.Group(), bg = new THREE.SphereGeometry(0.15, 6, 5);
-    [[-6.7, 1], [-3.3, 5], [-6.7, 9], [-3.3, 13], [-6.7, 17], [-3.3, 21], [5.2, -3.2], [-0.8, -3.6], [4.8, 2], [9.2, 9.6], [-13.6, 8.4], [-8.5, 15.5]].forEach(([x, z]) => {
+    [[-6.7, 1], [-3.3, 5], [-6.7, 9], [-3.3, 13], [-6.7, 17], [-3.3, 21], [5.2, -3.2], [-0.8, -3.6], [0.4, 8.2], [6.6, 9.2], [-13.6, 8.4], [-8.5, 15.5]].forEach(([x, z]) => {
       g.add(cyl(0.04, 0.05, 0.5, 5, C.chair, x, 0, z)); const b = new THREE.Mesh(bg, M.bulb); b.position.set(x, 0.58, z); g.add(b);
     });
     piece(g, 0, 0, 1.9); }
@@ -369,8 +369,8 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
   // ---------- rótulos ----------
   const spots = {
     casa: ['A casa', -9, 6.4, -7, 0.5], piscina: ['Piscina', 13.5, 1.6, 0.3, 0.42], jacuzzi: ['Jacuzzi', 17.5, 3.4, 8.4, 0.36],
-    fogueira: ['Fogueira', 0.5, 3.4, 15.5, 0.38], campo: ['Campo', 14, 3.6, -10, 0.46], playground: ['Playground', 5.6, 4.3, 6.6, 0.36],
-    jogos: ['Garagem e jogos', -17.6, 4.4, 13.6, 0.4],
+    fogueira: ['Fogueira', 0.5, 3.4, 15.5, 0.38], campo: ['Campo', 14, 3.6, -10, 0.46], playground: ['Playground', 9, 4.3, 15.6, 0.36],
+    jogos: ['Garagem e jogos', -17.6, 4.4, 8.2, 0.4], churrasqueira: ['Churrasqueira', 2.2, 4.9, -7.2, 0.38],
   };
   const labels = Object.entries(spots).map(([id, [text, x, y, z]]) => {
     const el = document.createElement('button');
@@ -516,7 +516,9 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
       if (!focusId) { seek = false; return; }
       const [, x, y, z, zoom] = spots[focusId];
       fpGoal.set(x, Math.min(y, 2.4), z); zoomGoal = zoom;
-      let dy = (Math.atan2(-x, z) - 0.35 - world.rotation.y) % (Math.PI * 2);
+      // a câmera nunca dá a volta por trás da serra: o giro fica limitado à metade da frente
+      const want = Math.max(-1.0, Math.min(0.9, Math.atan2(-x, z) - 0.35));
+      let dy = (want - world.rotation.y) % (Math.PI * 2);
       if (dy > Math.PI) dy -= Math.PI * 2; if (dy < -Math.PI) dy += Math.PI * 2;
       yawGoal = userYaw + dy; seek = true;
     },

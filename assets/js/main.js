@@ -103,7 +103,8 @@ const SPOTS = [
   { id: 'campo', title: 'Campo de futebol', text: 'Gramado e cercado, logo depois da piscina.', img: 'campo-1' },
   { id: 'playground', title: 'Playground', text: 'Mini parquinho para as crianças de até 10 anos.', img: 'playground-1' },
   { id: 'fogueira', title: 'Roda de fogueira', text: 'Cadeiras em círculo sob o varal de luzes, para a noite render.', img: 'fogueira-dia' },
-  { id: 'jogos', title: 'Garagem e jogos', text: 'Vaga para 2 a 3 carros e, na parte coberta, a mesa de sinuca e pingue-pongue.', img: 'sinuca' },
+  { id: 'jogos', title: 'Garagem e jogos', text: 'Vaga para 2 a 3 carros em fila e, ao fundo, na parte coberta, a mesa de sinuca e pingue-pongue.', img: 'sinuca' },
+  { id: 'churrasqueira', title: 'Churrasqueira', text: 'Churrasqueira a carvão, forno de pizza e bancada, ao lado da casa.', img: 'churrasqueira' },
 ];
 const hero = $('#hero'), spotEl = $('#spot');
 let hero3d = null, spotI = -1;
