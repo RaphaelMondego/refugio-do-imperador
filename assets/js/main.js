@@ -90,13 +90,11 @@ allBtn.addEventListener('click', () => lbOpen(ALL, 0));
 const SPOTS = [
   { id: 'casa', title: 'A casa', text: 'Cinco quartos climatizados, três suítes, sala ampla e cozinha completa.', img: 'fachada' },
   { id: 'piscina', title: 'Piscina', text: 'Privativa, para mergulhar o dia inteiro. À noite, acende em cores.', img: 'piscina-1' },
-  { id: 'jacuzzi', title: 'Jacuzzi', text: 'No deck de madeira, com ombrelone e vista para as montanhas.', img: 'jacuzzi-ceu' },
-  { id: 'fogueira', title: 'Roda de fogueira', text: 'Cadeiras em círculo sob o varal de luzes, para a noite render.', img: 'fogueira-dia' },
-  { id: 'gourmet', title: 'Espaço gourmet', text: 'Churrasqueira a carvão, forno de pizza e cozinha ao ar livre.', img: 'churrasqueira' },
-  { id: 'jogos', title: 'Jogos', text: 'Sinuca, pingue-pongue e fliperama para todas as idades.', img: 'sinuca' },
-  { id: 'campo', title: 'Campo de futebol', text: 'Gramado e cercado, pronto para a pelada do fim de tarde.', img: 'campo-1' },
+  { id: 'jacuzzi', title: 'Jacuzzi', text: 'No deck ao lado da piscina, com ombrelone e vista para as montanhas.', img: 'jacuzzi-ceu' },
+  { id: 'campo', title: 'Campo de futebol', text: 'Gramado e cercado, logo depois da piscina.', img: 'campo-1' },
   { id: 'playground', title: 'Playground', text: 'Mini parquinho para as crianças de até 10 anos.', img: 'playground-1' },
-  { id: 'cachoeira', title: 'Cachoeira', text: 'A 100 metros do portão, dentro da Mata Atlântica.', img: 'cachoeira-1' },
+  { id: 'fogueira', title: 'Roda de fogueira', text: 'Cadeiras em círculo sob o varal de luzes, para a noite render.', img: 'fogueira-dia' },
+  { id: 'jogos', title: 'Garagem e jogos', text: 'Vaga para 2 a 3 carros e, na parte coberta, a mesa de sinuca e pingue-pongue.', img: 'sinuca' },
 ];
 const hero = $('#hero'), spotEl = $('#spot');
 let hero3d = null, spotI = -1;

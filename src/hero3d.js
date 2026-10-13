@@ -141,7 +141,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     g.add(box(6, 2.7, 3.4, C.wall), box(4.2, 1.0, 0.5, C.wood, 0, 0, 1.9), box(4.4, 0.12, 0.8, 0x3a3a3a, 0, 1.0, 1.95));
     const r = hipRoof(7.2, 5.2, 1.5); r.position.y = 2.7; g.add(drop(r, 1.15));
     g.add(drop(box(0.9, 1.6, 0.9, C.brick, -1.8, 3.0, -0.4), 1.4));
-    piece(g, 16, -4.6, 0.55); }
+    piece(g, 2.2, -7.2, 0.55); }
 
   // campo de futebol
   { const g = new THREE.Group();
@@ -155,15 +155,16 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
       const f = new THREE.Mesh(new THREE.BoxGeometry(w, 2.6, d), M.fence); f.position.set(x, 2.0, z); g.add(f);
     });
     [[6.6, 4.1], [-6.6, 4.1], [6.6, -4.1], [-6.6, -4.1], [0, 4.1], [0, -4.1]].forEach(([x, z]) => g.add(box(0.14, 3.3, 0.14, C.fence, x, 0, z)));
-    piece(g, 11.5, -11.5, 0.7); }
+    g.rotation.y = Math.PI / 2;
+    piece(g, 14, -10, 0.7); }
 
-  // piscina
+  // piscina (na horizontal, colada ao campo: passa-se por ela para chegar ao gramado)
   { const g = new THREE.Group();
-    g.add(box(11, 0.3, 13.5, C.stone), box(5.7, 0.34, 10.7, C.tile, 1, 0, 0.3), box(5, 0.37, 10, M.water, 1, 0, 0.3));
-    floatie = shadow(new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.19, 6, 14), mat(0xf47b20))); floatie.rotation.x = Math.PI / 2; floatie.position.set(1, 0.46, 0.3); g.add(floatie);
-    g.add(box(11, 1.1, 0.35, C.brick, 0, 0.3, -6.6));
-    [[-3.6, -2], [-3.6, 1]].forEach(([x, z]) => { const c = box(0.8, 0.12, 2, C.chair, x, 0.55, z); const b = box(0.8, 0.12, 0.9, C.chair, x, 0.8, z - 1.3); b.rotation.x = 0.8; g.add(c, b); });
-    piece(g, 14, 5.25, 0.85); }
+    g.add(box(13, 0.3, 8.5, C.stone), box(10.7, 0.34, 5.7, C.tile, 0, 0, -0.9), box(10, 0.37, 5, M.water, 0, 0, -0.9));
+    floatie = shadow(new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.19, 6, 14), mat(0xf47b20))); floatie.rotation.x = Math.PI / 2; floatie.position.set(0, 0.46, -0.9); g.add(floatie);
+    g.add(box(8.6, 1.1, 0.35, C.brick, -2.2, 0.3, -4.08), box(2.4, 0.3, 0.9, C.brick, 4.6, 0.3, -3.8));
+    [[-4.6, 3.1], [-2.6, 3.1]].forEach(([x, z]) => { const c = box(0.8, 0.12, 2, C.chair, x, 0.55, z); const b = box(0.8, 0.12, 0.9, C.chair, x, 0.8, z - 1.3); b.rotation.x = 0.8; g.add(c, b); });
+    piece(g, 13.5, 1.2, 0.85); }
 
   // jacuzzi no deck
   { const g = new THREE.Group();
@@ -173,7 +174,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     const wtr = cyl(1.35, 1.35, 0.52, 8, M.spa, 0.5, 0.6, 0.2); wtr.rotation.y = Math.PI / 8;
     g.add(tub, wtr, cyl(0.06, 0.06, 3.4, 6, C.chair, -1.9, 0.6, -1.6));
     const um = cyl(0.05, 2.5, 0.7, 8, mat(C.umbrella, { side: THREE.DoubleSide }), -0.6, 3.5, -0.6); g.add(drop(um, 1.6));
-    piece(g, 11.5, 15.3, 1.0); }
+    piece(g, 17, 8.2, 1.0); }
 
   // coreto
   { const g = new THREE.Group();
@@ -187,7 +188,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
   { const g = new THREE.Group();
     g.add(cyl(1.9, 2.0, 0.55, 12, 0x5a9a78), cyl(1.65, 1.65, 0.57, 12, M.water), cyl(0.18, 0.25, 1.3, 8, 0x8a8f86, 0, 0.5, 0),
       cyl(0.85, 0.2, 0.22, 10, 0x8a8f86, 0, 1.25, 0), cyl(0.14, 0.16, 0.7, 8, 0x8a8f86, 0, 1.45, 0), cyl(0.45, 0.1, 0.16, 10, 0x8a8f86, 0, 1.95, 0));
-    piece(g, 5.6, 6.6, 1.25); }
+    piece(g, -11.5, 12.2, 1.25); }
 
   // playground
   { const g = new THREE.Group();
@@ -197,7 +198,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     const slide = box(0.8, 0.1, 2.6, C.slide, 0, 0.62, 2.0); slide.rotation.x = 0.55; g.add(slide);
     const ramp = box(1.0, 0.1, 2.0, 0xd9642f, -1.6, 0.62, 0); ramp.rotation.z = -0.75; g.add(ramp);
     g.add(box(0.1, 1.8, 0.1, C.wood, 2.6, 0, -0.6), box(0.1, 1.8, 0.1, C.wood, 2.6, 0, 0.6), box(0.1, 0.1, 1.4, C.wood, 2.6, 1.8, 0), box(0.5, 0.06, 0.25, 0xd9642f, 2.6, 0.5, 0));
-    piece(g, -11.5, 12.2, 1.35); }
+    piece(g, 5.6, 6.6, 1.35); }
 
   // fogueira com cadeiras e varal de luzes
   const firePos = new THREE.Vector3(0.5, 0, 15.5);
@@ -232,10 +233,10 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     piece(g, 0, 0, delay);
   };
   stringLights([[-3.3, 12], [4.3, 12], [4.3, 19.2], [-3.3, 19.2], [-3.3, 12]], 3.1, 1.9);
-  stringLights([[8.7, 12.3], [8.7, -1.2], [19.3, -1.2], [19.3, 12.3]], 3.3, 2.0);
+  stringLights([[7.2, 5.3], [7.2, -2.9], [19.8, -2.9], [19.8, 5.3]], 3.3, 2.0);
 
   // árvores
-  const blocked = [[-9, -7, 10.5], [-13.5, 1.5, 6.5], [11.5, -11.5, 9], [14, 5, 9], [11.5, 15.3, 5], [0.5, 15.5, 5], [-11.5, 12.2, 4], [16, -4.6, 5], [-5, 12, 3.2], [-5, 20, 3.2], [7, 21, 5], [17, 16, 5], [-24, -9, 2.6], [-22.2, -3.5, 2.6], [-21.2, 2.5, 2.6], [-20.4, 8, 2.6], [-19.6, 13, 2.8], [-19.2, 17.5, 3.2], [-2.3, 1.9, 2.6]];
+  const blocked = [[-9, -7, 10.5], [-13.5, 1.5, 6.5], [14, -10, 8.6], [13.5, 1.2, 8.6], [17, 8.2, 5.2], [19, 13.5, 4], [0.5, 15.5, 5], [-11.5, 12.2, 3.6], [5.6, 6.6, 4], [2.2, -7.2, 4.6], [-5, 12, 3.2], [-5, 20, 3.2], [-17.6, 11.2, 6.6], [-2.3, 1.9, 2.6]];
   const greens = [0x3f7d4a, 0x4f9157, 0x2f6b45, 0x64a05a];
   const tree = (x, z, s, delay) => {
     const g = new THREE.Group();
@@ -254,7 +255,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     if (blocked.some(([bx, bz, br]) => Math.hypot(x - bx, z - bz) < br)) continue;
     tree(x, z, 0.85 + rnd() * 0.75, 1.3 + rnd() * 1.0);
   }
-  [[1.6, -13.5, 1.3], [7.6, -5.2, 1.0], [-1.5, 6, 0.9], [-17, 16, 1.1], [6.5, 11.5, 0.8]].forEach(([x, z, s], i) => tree(x, z, s, 1.6 + i * 0.1));
+  [[2.5, -13.5, 1.3], [7.4, -6.2, 1.0], [-1.5, 6.5, 0.9], [9.5, 12.5, 0.9], [-14.5, 17.5, 1.0]].forEach(([x, z, s], i) => tree(x, z, s, 1.6 + i * 0.1));
 
   // ---------- serra ao fundo (com o Dedo de Deus) ----------
   { const g = new THREE.Group();
@@ -276,49 +277,31 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     });
     piece(g, 0, 0, 0.45); }
 
-  // ---------- rio e cachoeira ----------
-  const mkTex = (w, h, draw) => { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; return t; };
-  const streaks = (base) => (x, w, h) => { if (base) { x.fillStyle = base; x.fillRect(0, 0, w, h); } for (let i = 0; i < 46; i++) { x.fillStyle = 'rgba(255,255,255,' + (0.25 + rnd() * 0.6).toFixed(2) + ')'; x.fillRect(rnd() * w, rnd() * h, 1 + rnd() * 3, 20 + rnd() * 70); } };
-  const flowTex = mkTex(64, 256, streaks()), fallTex = mkTex(64, 256, streaks('rgba(190,232,248,0.6)'));
-  const fadeTex = mkTex(4, 64, (x, w, h) => { const gr = x.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#000'); gr.addColorStop(0.75, '#fff'); gr.addColorStop(1, '#fff'); x.fillStyle = gr; x.fillRect(0, 0, w, h); });
-  fadeTex.colorSpace = THREE.NoColorSpace;
-  flowTex.repeat.set(1, 3); fallTex.repeat.set(1, 1.5);
-  const ribbon = (pts, w) => {
-    const pos = [], uv = [], idx = []; let acc = 0; const lens = [0];
-    for (let i = 1; i < pts.length; i++) { acc += pts[i].distanceTo(pts[i - 1]); lens.push(acc); }
-    pts.forEach((p, i) => {
-      const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)], dx = b.x - a.x, dz = b.z - a.z, l = Math.hypot(dx, dz) || 1, nx = -dz / l, nz = dx / l;
-      pos.push(p.x + (nx * w) / 2, p.y, p.z + (nz * w) / 2, p.x - (nx * w) / 2, p.y, p.z - (nz * w) / 2);
-      uv.push(0, lens[i] / acc, 1, lens[i] / acc);
-      if (i) { const k = i * 2; idx.push(k - 2, k - 1, k, k - 1, k + 1, k); }
-    });
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
-    return geo;
-  };
-  const fallMat = new THREE.MeshBasicMaterial({ color: 0xe6f7ff, map: fallTex, alphaMap: fadeTex, transparent: true, side: THREE.DoubleSide, depthWrite: false });
+  // ---------- garagem (2 a 3 carros) com a sinuca na parte coberta ----------
   { const g = new THREE.Group();
-    const curve = new THREE.CatmullRomCurve3([[-24.2, -9], [-22.2, -3.5], [-21.2, 2.5], [-20.4, 8], [-19.6, 13], [-19.15, 18.1]].map(([x, z]) => new THREE.Vector3(x, 0.05, z)));
-    const rPts = curve.getPoints(36);
-    const river = new THREE.Mesh(ribbon(rPts, 2.3), mat(0x58c4de, { roughness: 0.2, emissive: 0x1a8fb0, emissiveIntensity: 0.12, side: THREE.DoubleSide, flatShading: false })); river.receiveShadow = true;
-    const flow = new THREE.Mesh(ribbon(rPts.map((p) => p.clone().setY(0.08)), 2.1), new THREE.MeshBasicMaterial({ map: flowTex, transparent: true, opacity: 0.4, depthWrite: false, side: THREE.DoubleSide }));
-    const fPts = [[-19.15, 0.06, 18.1], [-19.12, -0.1, 18.55], [-19.1, -1.2, 18.95], [-19.08, -3.4, 19.2], [-19.06, -6.4, 19.35], [-19.04, -10, 19.45]].map(([x, y, z]) => new THREE.Vector3(x, y, z));
-    const fall = new THREE.Mesh(ribbon(new THREE.CatmullRomCurve3(fPts).getPoints(20), 2.2), fallMat);
-    g.add(river, flow, fall);
-    [[-22.9, -2.2, 0.55], [-20.1, 3.4, 0.5], [-21.9, 6.2, 0.6], [-18.8, 10.4, 0.5], [-20.9, 14.2, 0.55], [-17.9, 16.6, 0.7], [-20.5, 17.4, 0.65], [-19.6, 7.2, 0.3], [-19.3, 15.9, 0.32]].forEach(([x, z, r], i) => {
-      const m = shadow(new THREE.Mesh(new THREE.IcosahedronGeometry(r, 0), mat(i % 2 ? 0x8d938a : 0x767d74))); m.position.set(x, r * 0.3, z); m.rotation.set(i, i * 2, 0); m.scale.y = 0.7; g.add(m);
-    });
-    piece(g, 0, 0, 0.6); }
+    g.add(box(4.8, 0.08, 9.2, C.path));
+    const car = (x, z, color) => {
+      const c = new THREE.Group();
+      c.add(box(1.6, 0.5, 3.7, color, 0, 0.3, 0), box(1.42, 0.48, 1.9, 0x26313a, 0, 0.8, -0.2));
+      [[-0.8, 1.15], [0.8, 1.15], [-0.8, -1.15], [0.8, -1.15]].forEach(([wx, wz]) => { const w = cyl(0.32, 0.32, 0.2, 10, 0x1b1d20, wx, 0, wz); w.rotation.z = Math.PI / 2; w.position.y = 0.32; c.add(w); });
+      c.position.set(x, 0.08, z); g.add(c);
+    };
+    car(-1.1, -2.3, 0xecebe6); car(1.1, -2.1, 0x4a6fa5);
+    [[-2.1, 1.2], [2.1, 1.2], [-2.1, 4.3], [2.1, 4.3]].forEach(([x, z]) => g.add(box(0.2, 2.7, 0.2, C.wood, x, 0, z)));
+    const roof = hipRoof(5.2, 4.1, 1.1); roof.position.set(0, 2.7, 2.75); g.add(drop(roof, 1.7));
+    g.add(box(2.5, 0.16, 1.45, 0x3a2a1c, 0, 0.66, 2.75), box(2.2, 0.06, 1.15, 0x1f7a45, 0, 0.8, 2.75));
+    [[-1, 2.25], [1, 2.25], [-1, 3.25], [1, 3.25]].forEach(([x, z]) => g.add(box(0.12, 0.7, 0.12, 0x2a1d13, x, 0, z)));
+    piece(g, -17.6, 11.2, 0.9); }
 
-  // ---------- sinuca e pingue-pongue ----------
+  // ---------- mesa de vidro ----------
   { const g = new THREE.Group();
-    g.add(box(2.5, 0.16, 1.45, 0x3a2a1c, 0, 0.66, 0), box(2.2, 0.06, 1.15, 0x1f7a45, 0, 0.8, 0), box(2.5, 0.07, 1.4, 0x20242a, 0, 0.76, 2.7), box(0.04, 0.16, 1.4, C.white, 0, 0.83, 2.7));
-    [[-1, -0.5], [1, -0.5], [-1, 0.5], [1, 0.5], [-1, 2.2], [1, 2.2], [-1, 3.2], [1, 3.2]].forEach(([x, z]) => g.add(box(0.12, 0.7, 0.12, 0x2a1d13, x, 0, z)));
-    piece(g, -2.3, 0.6, 1.3); }
+    g.add(cyl(0.95, 0.95, 0.06, 20, mat(0xbfe3ea, { transparent: true, opacity: 0.75, roughness: 0.1 }), 0, 0.74, 0), cyl(0.1, 0.3, 0.74, 8, C.white));
+    for (let i = 0; i < 4; i++) { const a = (i / 4) * Math.PI * 2 + 0.6; g.add(box(0.5, 0.45, 0.5, C.white, Math.cos(a) * 1.45, 0, Math.sin(a) * 1.45)); }
+    piece(g, -2.3, 1.9, 1.3); }
 
   // ---------- luminárias de jardim ----------
   { const g = new THREE.Group(), bg = new THREE.SphereGeometry(0.15, 6, 5);
-    [[-6.7, 1], [-3.3, 5], [-6.7, 9], [-3.3, 13], [-6.7, 17], [-3.3, 21], [5.2, -3.2], [-0.8, -3.6], [4.8, 2], [8.5, 9.8], [-15, 9], [-8.5, 15.5]].forEach(([x, z]) => {
+    [[-6.7, 1], [-3.3, 5], [-6.7, 9], [-3.3, 13], [-6.7, 17], [-3.3, 21], [5.2, -3.2], [-0.8, -3.6], [4.8, 2], [9.2, 9.6], [-13.6, 8.4], [-8.5, 15.5]].forEach(([x, z]) => {
       g.add(cyl(0.04, 0.05, 0.5, 5, C.chair, x, 0, z)); const b = new THREE.Mesh(bg, M.bulb); b.position.set(x, 0.58, z); g.add(b);
     });
     piece(g, 0, 0, 1.9); }
@@ -376,8 +359,8 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
   scene.add(hemi, sun, moon);
   const pLight = (color, x, y, z, dist) => { const l = new THREE.PointLight(color, 0, dist, 1.6); l.position.set(x, y, z); world.add(l); return l; };
   const fireL = pLight(0xff8a3a, firePos.x, 1.6, firePos.z, 22);
-  const poolL = pLight(0xff3fd2, 15, 2.2, 5.5, 26);
-  const spaL = pLight(0x3ff0ff, 12, 2.4, 15.5, 12);
+  const poolL = pLight(0xff3fd2, 13.5, 2.2, 0.3, 26);
+  const spaL = pLight(0x3ff0ff, 17.5, 2.4, 8.4, 12);
   const homeL = pLight(0xffc56b, -4, 2.2, -1.5, 20);
   const dayCol = { hemiSky: new THREE.Color(0xfff6e0), hemiGr: new THREE.Color(0x8aa27a), water: new THREE.Color(C.water), wE: new THREE.Color(0x1a8fb0) };
   const nightCol = { hemiSky: new THREE.Color(0x35508c), hemiGr: new THREE.Color(0x16241c), water: new THREE.Color(0x9b3cff), wE: new THREE.Color(0xff2fd0) };
@@ -385,9 +368,9 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
 
   // ---------- rótulos ----------
   const spots = {
-    casa: ['A casa', -9, 6.4, -7, 0.5], piscina: ['Piscina', 15, 1.6, 5.5, 0.42], jacuzzi: ['Jacuzzi', 12, 3.4, 15.5, 0.36],
-    fogueira: ['Fogueira', 0.5, 3.4, 15.5, 0.38], gourmet: ['Espaço gourmet', 16, 4.8, -4.6, 0.4], jogos: ['Jogos', -2.3, 2.2, 1.9, 0.36],
-    campo: ['Campo', 11.5, 3.6, -11.5, 0.46], playground: ['Playground', -11.5, 4.3, 12.2, 0.36], cachoeira: ['Cachoeira', -19.4, 1.8, 15.6, 0.42],
+    casa: ['A casa', -9, 6.4, -7, 0.5], piscina: ['Piscina', 13.5, 1.6, 0.3, 0.42], jacuzzi: ['Jacuzzi', 17.5, 3.4, 8.4, 0.36],
+    fogueira: ['Fogueira', 0.5, 3.4, 15.5, 0.38], campo: ['Campo', 14, 3.6, -10, 0.46], playground: ['Playground', 5.6, 4.3, 6.6, 0.36],
+    jogos: ['Garagem e jogos', -17.6, 4.4, 13.6, 0.4],
   };
   const labels = Object.entries(spots).map(([id, [text, x, y, z]]) => {
     const el = document.createElement('button');
@@ -454,11 +437,9 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     fireL.intensity = (6 + n * 70) * flick;
     poolL.intensity = n * 95; spaL.intensity = n * 30; homeL.intensity = n * 34;
     flames.forEach((f, i) => { f.scale.y = 0.85 + Math.sin(time * (9 + i * 3) + i) * 0.22; });
-    // vida: água correndo, copas ao vento, boia, pássaros e fumaça
-    flowTex.offset.y = -time * 0.25; fallTex.offset.y = time * 0.9;
-    fallMat.color.setHex(0xe6f7ff).lerp(nightCol.hemiSky, n * 0.55);
+    // vida: copas ao vento, boia, pássaros e fumaça
     if (!reducedMotion) for (let i = 0; i < crowns.length; i++) { const c = crowns[i], ph = c.userData.ph; c.rotation.z = Math.sin(time * 1.1 + ph) * 0.035; c.rotation.x = Math.cos(time * 0.9 + ph) * 0.025; }
-    if (floatie) { floatie.position.x = 1 + Math.sin(time * 0.23) * 1.3; floatie.position.z = 0.3 + Math.cos(time * 0.17) * 3.2; floatie.rotation.z = time * 0.2; }
+    if (floatie) { floatie.position.x = Math.sin(time * 0.17) * 3.4; floatie.position.z = -0.9 + Math.cos(time * 0.23) * 1.3; floatie.rotation.z = time * 0.2; }
     const alive = clamp01((t - 2.6) / 1.2);
     birdMat.opacity = alive * (1 - n);
     for (let i = 0; i < birds.length; i++) {
