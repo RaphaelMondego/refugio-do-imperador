@@ -153,12 +153,12 @@ const minTime = new Promise((done) => {
   let i = 0;
   const tick = () => {
     el.textContent = text.slice(0, ++i);
-    if (i < text.length) setTimeout(tick, text[i] === ' ' ? 260 : 105 + Math.random() * 70);
-    else setTimeout(done, 900);
+    if (i < text.length) setTimeout(tick, text[i] === ' ' ? 110 : 45 + Math.random() * 35);
+    else setTimeout(done, 450);
   };
-  setTimeout(tick, 500);
+  setTimeout(tick, 250);
 });
-Promise.all([heroReady, minTime, Promise.race([loaded, new Promise((r) => setTimeout(r, 4000))])]).then(() => {
+Promise.all([heroReady, minTime, Promise.race([loaded, new Promise((r) => setTimeout(r, 2500))])]).then(() => {
   document.body.classList.remove('is-loading');
   setTimeout(() => hero3d && hero3d.start(preview.has('pronto')), 250);
   if (preview.has('noite')) { dn.click(); hero3d && hero3d.setNight(true, true); }
