@@ -139,7 +139,18 @@ dn.addEventListener('click', () => {
 });
 
 const loaded = new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', r)));
-const minTime = new Promise((r) => setTimeout(r, reduced ? 0 : 1500));
+// abertura: o nome do sítio é digitado letra a letra antes de o site aparecer
+const minTime = new Promise((done) => {
+  const el = $('#typed'), text = 'Refúgio do Imperador';
+  if (reduced || preview.has('pronto')) { el.textContent = text; return done(); }
+  let i = 0;
+  const tick = () => {
+    el.textContent = text.slice(0, ++i);
+    if (i < text.length) setTimeout(tick, text[i] === ' ' ? 260 : 105 + Math.random() * 70);
+    else setTimeout(done, 900);
+  };
+  setTimeout(tick, 500);
+});
 Promise.all([heroReady, minTime, Promise.race([loaded, new Promise((r) => setTimeout(r, 4000))])]).then(() => {
   document.body.classList.remove('is-loading');
   setTimeout(() => hero3d && hero3d.start(preview.has('pronto')), 250);
