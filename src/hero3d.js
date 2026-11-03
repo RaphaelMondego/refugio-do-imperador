@@ -58,7 +58,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     mesh.position.set(x, y + h / 2, z);
     return mesh;
   };
-  const hipRoof = (w, d, h) => {
+  const hipRoof = (w, d, h, roofMat = M.roof, under = 0x8f3f2c) => {
     const rl = Math.max(0, (w - d) / 2), a = w / 2, b = d / 2;
     const A = [-a, 0, -b], B = [a, 0, -b], Cc = [a, 0, b], D = [-a, 0, b], R1 = [-rl, h, 0], R2 = [rl, h, 0];
     const v = [D, Cc, R2, D, R2, R1, B, A, R1, B, R1, R2, Cc, B, R2, A, D, R1].flat();
@@ -66,8 +66,8 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
     g.computeVertexNormals();
     const grp = new THREE.Group();
-    grp.add(shadow(new THREE.Mesh(g, M.roof)));
-    grp.add(box(w, 0.14, d, 0x8f3f2c, 0, -0.14, 0));
+    grp.add(shadow(new THREE.Mesh(g, roofMat)));
+    grp.add(box(w, 0.14, d, under, 0, -0.14, 0));
     return grp;
   };
   const archShape = (w, h) => {
@@ -88,6 +88,8 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
   };
 
   let floatie = null;
+  // a piaçava fica transparente quando o tour foca o pergolado, para mostrar os sofás
+  const thatchMat = mat(0xb8904f, { transparent: true, side: THREE.DoubleSide }), thatchUnder = mat(0x7a5a32, { transparent: true });
   const crowns = [];
 
   // ---------- peças animadas ----------
@@ -136,12 +138,15 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     [-1.5, 2.5, 6.5, 10.5].forEach((z) => g.add(archWindow(1.2, 1.5, -7.3, 1.1, z, -Math.PI / 2)));
     piece(g, -9, -7, 0.3); }
 
-  // espaço gourmet
+  // varanda da churrasqueira: extensão aberta da lateral da casa, com telhado de uma água
   { const g = new THREE.Group();
-    g.add(box(6, 2.7, 3.4, C.wall), box(4.2, 1.0, 0.5, C.wood, 0, 0, 1.9), box(4.4, 0.12, 0.8, 0x3a3a3a, 0, 1.0, 1.95));
-    const r = hipRoof(7.2, 5.2, 1.5); r.position.y = 2.7; g.add(drop(r, 1.15));
-    g.add(drop(box(0.9, 1.6, 0.9, C.brick, -1.8, 3.0, -0.4), 1.4));
-    piece(g, 2.2, -7.2, 0.55); }
+    g.add(box(6.2, 0.12, 6.6, C.stone));
+    const roof = shadow(new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.16, 7.2), M.roof)); roof.position.set(0.1, 3.0, 0); roof.rotation.z = -0.12; g.add(drop(roof, 1.15));
+    [-3.1, 0, 3.1].forEach((z) => g.add(box(0.2, 2.62, 0.2, C.wood, 2.85, 0, z)));
+    g.add(box(1.7, 1.0, 1.0, C.brick, -1.6, 0, -2.8), box(1.5, 0.06, 0.8, 0x2b2b2b, -1.6, 1.0, -2.8), box(0.7, 3.2, 0.7, C.brick, -1.6, 1.0, -3.0));
+    g.add(box(1.8, 1.0, 0.8, C.wood, 0.5, 0, -2.85), cyl(0.5, 0.58, 0.62, 10, 0x8a8f86, 0.5, 1.0, -2.85));
+    g.add(box(2.1, 0.08, 1.0, C.wood, 0.4, 0.72, 0.7), box(1.4, 0.72, 0.5, 0x5a3d2a, 0.4, 0, 0.7), box(2.1, 0.4, 0.35, C.wood, 0.4, 0, 1.55), box(2.1, 0.4, 0.35, C.wood, 0.4, 0, -0.15));
+    piece(g, 1.5, -7.2, 0.55); }
 
   // campo de futebol
   { const g = new THREE.Group();
@@ -236,7 +241,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
   stringLights([[7.2, 5.3], [7.2, -2.9], [19.8, -2.9], [19.8, 5.3]], 3.3, 2.0);
 
   // árvores
-  const blocked = [[-9, -7, 10.5], [-13.5, 1.5, 6.5], [14, -10, 8.6], [13.5, 1.2, 8.6], [17, 8.2, 5.2], [19, 13.5, 4], [0.5, 15.5, 5], [-11.5, 12.2, 3.6], [9, 15.6, 4.2], [2.2, -7.2, 4.6], [-5, 12, 3.2], [-5, 20, 3.2], [-17.6, 11.7, 7], [-2.3, 1.9, 2.6]];
+  const blocked = [[-9, -7, 10.5], [-13.5, 1.5, 6.5], [14, -10, 8.6], [13.5, 1.2, 8.6], [17, 8.2, 5.2], [19, 13.5, 4], [16.6, 14.3, 5.2], [0.5, 15.5, 5], [-11.5, 12.2, 3.6], [9, 15.6, 4.2], [1.5, -7.2, 4.8], [-5, 12, 3.2], [-5, 20, 3.2], [-17.6, 11.7, 7], [-2.3, 1.9, 2.6]];
   const greens = [0x3f7d4a, 0x4f9157, 0x2f6b45, 0x64a05a];
   const tree = (x, z, s, delay) => {
     const g = new THREE.Group();
@@ -292,6 +297,18 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     g.add(box(2.5, 0.16, 1.45, 0x3a2a1c, 0, 0.66, -3.55), box(2.2, 0.06, 1.15, 0x1f7a45, 0, 0.8, -3.55));
     [[-1, -4.05], [1, -4.05], [-1, -3.05], [1, -3.05]].forEach(([x, z]) => g.add(box(0.12, 0.7, 0.12, 0x2a1d13, x, 0, z)));
     piece(g, -17.6, 11.7, 0.9); }
+
+  // ---------- pergolado de piaçava encostado no muro, com sofás e poltronas ----------
+  { const g = new THREE.Group(), yellow = 0xf2c230, yellowDark = 0xd9a520;
+    g.add(box(0.3, 0.75, 7.8, 0x3f8a5a, 1.95, 0, 0), box(3.6, 0.16, 6.6, C.deck));
+    [-3.1, 0, 3.1].forEach((z) => g.add(box(0.18, 2.5, 0.18, C.wood, -1.6, 0.16, z), box(0.18, 2.5, 0.18, C.wood, 1.6, 0.16, z)));
+    const roof = hipRoof(7.4, 4.4, 1.25, thatchMat, thatchUnder); roof.rotation.y = Math.PI / 2; roof.position.y = 2.66; g.add(drop(roof, 1.75));
+    const sofa = (z, len) => g.add(box(0.95, 0.36, len, yellow, 1.05, 0.16, z), box(0.26, 0.55, len, yellowDark, 1.48, 0.4, z));
+    sofa(-1.5, 2.4); sofa(1.6, 1.8);
+    [[-1.9], [-0.6]].forEach(([z]) => g.add(box(0.85, 0.36, 0.85, yellow, -0.8, 0.16, z), box(0.24, 0.55, 0.85, yellowDark, -1.2, 0.4, z)));
+    g.add(box(0.8, 0.32, 1.3, 0x5a3d2a, 0.2, 0.16, -1.25));
+    const rede = box(0.7, 0.06, 2.4, 0xf06a1f, -1.25, 0.95, 1.6); rede.rotation.x = 0.04; g.add(rede);
+    piece(g, 16.6, 14.3, 1.05); }
 
   // ---------- mesa de vidro ----------
   { const g = new THREE.Group();
@@ -370,7 +387,7 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
   const spots = {
     casa: ['A casa', -9, 6.4, -7, 0.5], piscina: ['Piscina', 13.5, 1.6, 0.3, 0.42], jacuzzi: ['Jacuzzi', 17.5, 3.4, 8.4, 0.36],
     fogueira: ['Fogueira', 0.5, 3.4, 15.5, 0.38], campo: ['Campo', 14, 3.6, -10, 0.46], playground: ['Playground', 9, 4.3, 15.6, 0.36],
-    jogos: ['Garagem e jogos', -17.6, 4.4, 8.2, 0.4], churrasqueira: ['Churrasqueira', 2.2, 4.9, -7.2, 0.38],
+    jogos: ['Garagem e jogos', -17.6, 4.4, 8.2, 0.4], churrasqueira: ['Churrasqueira', 1.5, 4.2, -7.2, 0.38], pergolado: ['Pergolado', 16.6, 4.4, 14.3, 0.38],
   };
   const labels = Object.entries(spots).map(([id, [text, x, y, z]]) => {
     const el = document.createElement('button');
@@ -436,6 +453,8 @@ export function initHero({ canvas, labelsEl, hero, reducedMotion = false, onSpot
     const flick = 0.82 + Math.sin(time * 11) * 0.09 + Math.sin(time * 23.7) * 0.07;
     fireL.intensity = (6 + n * 70) * flick;
     poolL.intensity = n * 95; spaL.intensity = n * 30; homeL.intensity = n * 34;
+    const tk = focusId === 'pergolado' ? 0.15 : 1;
+    thatchMat.opacity += (tk - thatchMat.opacity) * 0.08; thatchUnder.opacity = thatchMat.opacity; thatchMat.depthWrite = thatchUnder.depthWrite = thatchMat.opacity > 0.97;
     flames.forEach((f, i) => { f.scale.y = 0.85 + Math.sin(time * (9 + i * 3) + i) * 0.22; });
     // vida: copas ao vento, boia, pássaros e fumaça
     if (!reducedMotion) for (let i = 0; i < crowns.length; i++) { const c = crowns[i], ph = c.userData.ph; c.rotation.z = Math.sin(time * 1.1 + ph) * 0.035; c.rotation.x = Math.cos(time * 0.9 + ph) * 0.025; }
